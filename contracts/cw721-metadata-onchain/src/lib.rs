@@ -2,7 +2,9 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 use cosmwasm_std::Empty;
-pub use cw721_base::{ContractError, InstantiateMsg, MintMsg, MinterResponse, QueryMsg};
+pub use cw721_base::{
+    ContractError, InstantiateMsg, MigrateMsg, MintMsg, MinterResponse, QueryMsg,
+};
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema, Debug, Default)]
 pub struct Trait {
@@ -63,6 +65,12 @@ pub mod entry {
     #[entry_point]
     pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> StdResult<Binary> {
         Cw721MetadataContract::default().query(deps, env, msg)
+    }
+
+    // 이게 없으면 마이그레이션 불가
+    #[cfg_attr(not(feature = "library"), entry_point)]
+    pub fn migrate(deps: DepsMut, _env: Env, _msg: MigrateMsg) -> StdResult<Response> {
+        Ok(Response::new().add_attribute("migration msg", "done"))
     }
 }
 

@@ -133,3 +133,7 @@ pub enum QueryMsg {
 pub struct MinterResponse {
     pub minter: String,
 }
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct MigrateMsg {}
